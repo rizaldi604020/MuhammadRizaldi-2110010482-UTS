@@ -120,6 +120,7 @@ public class FormLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+           // Memeriksa apakah nilai yang dimasukkan di JTextField tfUsername sama dengan "rizal"
         if("rizal".equals(tfUsername.getText())){
             if("rizal".equals(pfPassword.getText())){ //coding jika username dan password benar
                 MenuUtama menuUtama = new MenuUtama();

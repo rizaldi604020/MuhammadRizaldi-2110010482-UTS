@@ -373,21 +373,25 @@ public class MenuUtama extends javax.swing.JFrame {
            String keteragan = taKeteragan.getText();
            
         try {
-           String sql = "INSERT INTO tb_agenda (tanggal,nama_kegiatan,keterangan)VALUES(?,?,?)";
+           // Menyiapkan pernyataan SQL untuk memasukkan data ke dalam tabel tb_agenda
+            String sql = "INSERT INTO tb_agenda (tanggal,nama_kegiatan,keterangan)VALUES(?,?,?)";
            PreparedStatement st =Con.prepareStatement(sql);
+           
+           // Menetapkan nilai parameter pada pernyataan SQL
            st.setDate(1, tanggal);
            st.setString(2, namaKegiatan);
            st.setString(3, keteragan);
            
+            // Menjalankan pernyataan SQL untuk memasukkan data ke dalam tabel
            int rowInserted = st.executeUpdate();
            if (rowInserted>0){
                JOptionPane.showMessageDialog(this, "Data Berhasil Disimpan");
                jButton3ActionPerformed(evt);
-               tampilDataAgenda();
+               tampilDataAgenda(); // Menampilkan pesan berhasil jika data berhasil dimasukkan
                
                
            }
-            
+             // Menutup pernyataan SQL
             st.close();
         } catch (Exception e){
             JOptionPane.showMessageDialog(rootPane, "Gagal menyimpan data "+e.getMessage());
@@ -395,8 +399,12 @@ public class MenuUtama extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTable1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseReleased
+        // Memeriksa apakah tombol mouse yang ditekan adalah tombol kanan (BUTTON3)
         if(evt.getButton()==MouseEvent.BUTTON3){
+             // Memeriksa apakah terjadi trigger popup (misalnya, klik kanan)
+        // dan terdapat baris yang dipilih dalam tabel (getSelectedRowCount()!=0)
             if(evt.isPopupTrigger()&& jTable1.getSelectedRowCount()!=0){
+               // Menampilkan menu popup PopUpAgenda pada posisi mouse yang dilepaskan
                 PopUpAgenda.show(evt.getComponent(), evt.getX(), evt.getY());
             }
         }
@@ -412,14 +420,16 @@ public class MenuUtama extends javax.swing.JFrame {
 
         // Tampilkan konfirmasi dialog
         int dialogResult = JOptionPane.showConfirmDialog(this, "Apakah Anda yakin ingin menghapus data?", "Konfirmasi Hapus", JOptionPane.YES_NO_OPTION);
-
+        
+        // Jika pengguna menekan tombol "YES" pada dialog konfirmasi
         if (dialogResult == JOptionPane.YES_OPTION) {
             try {
                 String sql = "DELETE FROM tb_agenda WHERE nama_kegiatan = ?";
                 
                 try (PreparedStatement st = Con.prepareStatement(sql)) {
                     st.setString(1, namaKegiatanToDelete);
-
+                    
+                    // Jalankan pernyataan SQL untuk menghapus data
                     int rowDeleted = st.executeUpdate();
 
                     if (rowDeleted > 0) {
@@ -430,6 +440,7 @@ public class MenuUtama extends javax.swing.JFrame {
                     }
                 }
             } catch (SQLException e) {
+                // Tampilkan pesan kesalahan jika terjadi exception selama operasi database
                 JOptionPane.showMessageDialog(rootPane, "Gagal menghapus data " + e.getMessage());
             }
         }
@@ -494,10 +505,14 @@ public class MenuUtama extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+         // Membuat objek MessageFormat untuk judul header pada laporan cetak
         MessageFormat header = new MessageFormat("Agenda Pribadi");
         
+         // Membuat objek MessageFormat untuk footer pada laporan cetak
         MessageFormat footer = new MessageFormat("Page(1,number)");
         try{
+            // Memulai proses pencetakan tabel (jTable1) dengan mode NORMAL,
+        // menggunakan judul header dan nomor halaman footer yang telah ditentukan
             jTable1.print(JTable.PrintMode.NORMAL,header,footer);
         } catch (java.awt.print.PrinterException e){
             System.err.println("Tidak Bisa Print"+ e.getMessage());
